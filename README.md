@@ -1,8 +1,12 @@
 # HandShake
 
 A deal making application for the modern age
+
+```
 Download the project and run npm install in the components listed below
+
 I don't really know what you'll do since I haven't set up other aws accounts to use my resoureces
+```
 
 ## Project is broken up into 2 components
 
