@@ -7,7 +7,6 @@ import Dashboard from "./containers/dashboard/Dashboard"
 import NotFound from "./containers/four0four/NotFound";
 import AppliedRoute from "./components/AppliedRoute";
 import Documents from "./containers/dashboard/sections/Documents"
-import MakeTransaction from "./containers/dashboard/maketransaction/MakeTransaction"
 
 export default ({ childProps }) =>
     <Switch>
@@ -19,7 +18,6 @@ export default ({ childProps }) =>
         <AppliedRoute path="/video" exact component={Documents} props={childProps}/>
         <AppliedRoute path="/audio" exact component={Documents} props={childProps}/>
         <AppliedRoute path="/images" exact component={Documents} props={childProps}/>
-        <AppliedRoute path="/maketransaction" exact component={MakeTransaction} props={childProps}/>
 
         {/* Finally, catch all unmatched routes */}
         <Route component={NotFound} />

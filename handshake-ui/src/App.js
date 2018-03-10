@@ -5,6 +5,7 @@ import { Auth } from "aws-amplify";
 import logo from './HandShake.svg';
 import Routes from "./Routes"
 import RouteNavItem from "./components/RouteNavItem";
+import TransactionsModal from "./containers/modals/transactions/TransactionsModal"
 import "./App.css";
 
 class App extends Component {
@@ -16,9 +17,13 @@ class App extends Component {
             isAuthenticating: true,
             authNavBarOptions: ['Make Transaction', 'Share', 'About/FAQ', 'Search', 'Account'],
             unAuthNavBarOptions: ['Signup', 'Login'],
-            navBarElements: []
-
+            navBarElements: [],
+            isModalOpen: false
         };
+        // After ES6, non-React methods no longer auto-bind this
+        // removing this line will cause setModealOpenFalse to not have 'this' reference
+        // having callback function executed by modal component
+        this.closeModal = this.closeModal.bind(this);
     }
     userHasAuthenticated = authenticated => {
         this.setState({
@@ -39,14 +44,31 @@ class App extends Component {
         let key = 1;
         this.state.authNavBarOptions.forEach( navOption => {
             const href = "/"+navOption.toLowerCase().replace(" ", "");
-            navOptionsArray.push(
-                <RouteNavItem key = {key} href= {href}>{navOption}</RouteNavItem>
-            );
+
+            // build navBar Button Shit up in there to open a sweet fucking modal boi
+            if(href === '/maketransaction') {
+                navOptionsArray.push(
+                    <NavItem key = {key} onClick={() => this.openModal()}>{navOption}</NavItem>
+                );
+            }
+            else{
+                navOptionsArray.push(
+                    <RouteNavItem key = {key} href= {href}>{navOption}</RouteNavItem>
+                );
+            }
             key = key + 1;
         });
         navOptionsArray.push(<NavItem key={key} onClick={this.handleLogout}>Logout</NavItem>);
         return navOptionsArray;
     }
+    openModal() {
+        this.setState({ isModalOpen: true })
+    }
+
+    closeModal() {
+        this.setState({ isModalOpen: false })
+    }
+
 
     buildLoggedOutNavBar() {
         let navOptionsArray = [];
@@ -96,10 +118,11 @@ class App extends Component {
                     <img src={logo} className="App-logo" alt="logo" />
                     <h1 className="App-title">HandShake Application</h1>
                 </header>
+                {this.state.isModalOpen&& <TransactionsModal closeModal={this.closeModal} />}
                 <Navbar fluid collapseOnSelect>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <Link to="/">HandShake</Link>
+                            <Link to="/dashboard">HandShake</Link>
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>
