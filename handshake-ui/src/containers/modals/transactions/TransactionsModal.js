@@ -6,14 +6,16 @@ export default class TransactionsModal extends Component {
         super(props);
         this.state= {
             step: 1,
+            headers: ["A second great header"],
             header: "Wow, what an amazing header"
         };
-        this.close= this.close.bind(this)
+
+        this.close= this.close.bind(this);
+        this.nextStep = this.nextStep.bind(this);
     }
 
-    render() {
-
-        let modalStyle = {
+    componentWillMount() {
+        this.modalStyle = {
             position: 'absolute',
             top: '50%',
             left: '50%',
@@ -21,22 +23,7 @@ export default class TransactionsModal extends Component {
             zIndex: '9999',
             background: '#fff'
         };
-
-        if (this.props.width && this.props.height) {
-            modalStyle.width = this.props.width + 'px';
-            modalStyle.height = this.props.height + 'px';
-            modalStyle.marginLeft = '-' + (this.props.width / 2) + 'px';
-            modalStyle.marginTop = '-' + (this.props.height / 2) + 'px';
-            modalStyle.transform = null;
-        }
-
-        if (this.props.style) {
-            for (let key in this.props.style) {
-                modalStyle[key] = this.props.style[key]
-            }
-        }
-
-        let backdropStyle = {
+        this.backdropStyle = {
             position: 'absolute',
             width: '100%',
             height: '100%',
@@ -45,26 +32,72 @@ export default class TransactionsModal extends Component {
             zIndex: '9998',
             background: 'rgba(0, 0, 0, 0.3)'
         };
+    }
+
+    nextStep() {
+        const state = this.state;
+        this.setState({
+            header: state.headers[state.step-1],
+            step : state.step+1 });
+    }
+
+    render() {
+
+        if (this.props.width && this.props.height) {
+            this.modalStyle.width = this.props.width + 'px';
+            this.modalStyle.height = this.props.height + 'px';
+            this.modalStyle.marginLeft = '-' + (this.props.width / 2) + 'px';
+            this.modalStyle.marginTop = '-' + (this.props.height / 2) + 'px';
+            this.modalStyle.transform = null;
+        }
+
+        if (this.props.style) {
+            this.props.style.forEach(key => {
+                this.modalStyle[key] = this.props.style[key];
+            });
+        }
 
         if (this.props.backdropStyle) {
-            for (let key in this.props.backdropStyle) {
-                backdropStyle[key] = this.props.backdropStyle[key]
-            }
+            this.props.backdropStyle.forEach(key => {
+                this.backdropStyle[key] = this.props.backdropStyle[key];
+            });
         }
 
         if (this.state.step === 1) {
             return (
                 <div>
-                    <div style={modalStyle}>
+                    <div style={this.modalStyle}>
                         <div className="close-button-div">
                             <span className="fa-stack fa-lg close-button ">
                             </span>
                         </div>
                         <h1>{this.state.header}</h1>
-                        <p>hello Beotch</p>
+                        <p>hello Beotch 1</p>
+                        <p><button id = 'ok' onClick={this.nextStep}>Ok</button></p>
                         <p><button id = 'close-modal' onClick={this.close}>Close</button></p>
                     </div>
-                    <div style={backdropStyle}
+                    <div style={this.backdropStyle}
+                         onClick={this.close}/>
+                </div>
+            )
+        }
+
+        else if(this.state.step === 2)
+        {
+
+            return (
+                <div>
+                    <div style={this.modalStyle}>
+                        <div className="close-button-div">
+                            <span className="fa-stack fa-lg close-button ">
+                            </span>
+                        </div>
+                        <h1>{this.state.header}</h1>
+                        <p>hello Beotch 2</p>
+                        <p><button id = 'ok' onClick={this.close}>Ok</button></p>
+                        <p><button id = 'close-modal' onClick={this.close}>Close</button></p>
+                    </div>
+                    <div style={this.backdropStyle}
                          onClick={this.close}/>
                 </div>
             )
@@ -72,7 +105,8 @@ export default class TransactionsModal extends Component {
     }
 
     close() {
-        // closeModal passed in as callback prop from App.js parent
+
+        // closeModal passed in as callback in props from App.js parent
         this.props.closeModal();
     }
 
