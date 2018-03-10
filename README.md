@@ -27,3 +27,4 @@ Who'd have thought that you would need, or really want, to see your website.
 * Has a couple of cute automated html-generating functions
 * Used a couple of Vanilla JavaScript framework features. Very nice.
   
+intellij acting up
